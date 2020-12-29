@@ -1,0 +1,133 @@
+<script>
+  // JSON de vehiculos
+  const vehiculosJSON = [
+    {
+        "marca": "Peugeot",
+        "modelo": "206",
+        "puertas": "4",
+        "precio": 200000
+    },
+    {
+        "marca": "Honda",
+        "modelo": "Titan",
+        "cilindrada": "125cc",
+        "precio": 60000
+    },
+    {
+        "marca": "Peugeot",
+        "modelo": "208",
+        "puertas": "5",
+        "precio": 250000
+    },
+    {
+        "marca": "Yamaha",
+        "modelo": "YBR",
+        "cilindrada": "125cc",
+        "precio": 80500.5
+    }
+] 
+
+// Genero la clase Vehiculo
+class Vehiculo {
+  constructor(marca, modelo, precio) {
+    this.marca = marca;
+    this.modelo = modelo;
+    this.precio = precio;
+  }
+
+  // Devuelve la marca y modelo del vehiculo
+  marcaYmodelo() {
+    return (`${this.marca} ${this.modelo}`);
+  };
+
+  // Devuelve el valor en formato $999.999,99
+  valor() {
+    var precioDe = Number.parseFloat(this.precio).toFixed(2)
+    var precioStr = new Intl.NumberFormat('en-US', {style: "currency", currency: "USD"}).format(precioDe);
+    return (`${precioStr}`);
+  };
+}
+
+// Genero la clase Auto que hereda de la clase Vehiculo
+class Auto extends Vehiculo {
+  constructor(marca, modelo, precio, puertas) {
+    super(marca, modelo, precio);
+    this.puertas = puertas;
+  }
+
+  // Imprime las caracteristicas del auto
+  caracteristicas() {
+    var precioDe = Number.parseFloat(this.precio).toFixed(2)
+    var precioStr = new Intl.NumberFormat('en-US', {style: "currency", currency: "USD"}).format(precioDe);
+    console.log(`Marca: ${this.marca} // Modelo: ${this.modelo} // Puertas: ${this.puertas} // Precio: ${precioStr}`);
+  };
+}
+
+// Genero la clase Moto que hereda de la clase Vehiculo
+class Moto extends Vehiculo {
+  constructor(marca, modelo, precio, cilindradas) {
+    super(marca, modelo, precio);
+    this.cilindradas = cilindradas;
+  }
+
+  // Imprime las caracteristicas del moto
+  caracteristicas() {
+    var precioDe = Number.parseFloat(this.precio).toFixed(2)
+    var precioStr = new Intl.NumberFormat('en-US', {style: "currency", currency: "USD"}).format(precioDe);
+    console.log(`Marca: ${this.marca} // Modelo: ${this.modelo} // Cilindradas: ${this.cilindradas} // Precio: ${precioStr}`);
+  };
+}
+
+
+var listadoVehiculos = []
+
+// Recorro el JSON
+for (var i = 0; i < vehiculosJSON.length; i++) {
+    // si tiene cilindrada genero un Objeto Moto y lo agrego al array listadoVehiculos
+   if(vehiculosJSON[i].cilindrada){
+     var auxMoto = new Moto(vehiculosJSON[i].marca,vehiculosJSON[i].modelo,vehiculosJSON[i].precio,vehiculosJSON[i].cilindrada)
+     listadoVehiculos.push(auxMoto)
+   }
+   // Sino genero un objeto Auto y lo agrego al array listadoVehiculos
+   else{
+    var auxAuto = new Auto(vehiculosJSON[i].marca,vehiculosJSON[i].modelo,vehiculosJSON[i].precio,vehiculosJSON[i].puertas)
+    listadoVehiculos.push(auxAuto)
+  }   
+};
+
+// Recorro el array y muestro las caracteristicas de los vehiculos
+for (var i = 0; i < listadoVehiculos.length; i++) {
+   listadoVehiculos[i].caracteristicas()   
+};
+console.log("=============================")
+
+// Ordeno el listado por precio de mayor a menor
+listadoVehiculos.sort(function (vehiculo1, vehiculo2) {
+  if (vehiculo1.precio < vehiculo2.precio) {
+    return 1;
+  }
+  if (vehiculo1.precio > vehiculo2.precio) {
+    return -1;
+  }
+  return 0;
+});
+
+// Muestro el vehiculo con mayor precio
+var maximo = listadoVehiculos[0];
+console.log(`Vehículo más caro: ${maximo.marcaYmodelo()}`);
+// Muestro el vehiculo con menor precio
+var minimo = listadoVehiculos[listadoVehiculos.length-1];;
+console.log(`Vehículo más barato: ${minimo.marcaYmodelo()}`);
+// Transformo los modelos de los vehiculos a minuscula, filtro los vehiculos que contienen "y" en su modelo y los muestro
+var vehiculosY = listadoVehiculos.filter((listadoVehiculos) => listadoVehiculos.modelo.toLowerCase().includes("y") );
+for (var i = 0; i < vehiculosY.length; i++) {
+  console.log(`Vehículo que contiene en el modelo la letra ‘Y’: ${vehiculosY[i].marcaYmodelo()} ${vehiculosY[i].valor()}`);  
+};
+console.log("=============================")
+// Muestro los vehiculos ordenados de mayor precio a menor
+console.log("Vehículos ordenados por precio de mayor a menor:")
+for (var i = 0; i < listadoVehiculos.length; i++) {
+   console.log(listadoVehiculos[i].marcaYmodelo())   
+};
+
+</script>
